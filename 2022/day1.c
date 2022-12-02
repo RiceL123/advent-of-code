@@ -10,8 +10,10 @@ int main(void) {
     int a;
     int i = 0;
     FILE *fp = fopen("day1.txt", "r");
-    while (i < 2248) {
-        
+    while (1) {
+        if (feof(fp)) {
+            break;
+        }
         sum = 0;
         char num[10];
         while (fgets(num, 10, fp)) {
