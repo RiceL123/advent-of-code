@@ -26,14 +26,14 @@ int main(void) {
         }
         //printf("sum: %d\n", sum);
 
-        if (sum > biggest_elf) {
+        if (sum >= biggest_elf) {
             third = second;
             second = biggest_elf;
             biggest_elf = sum;
-        } else if (sum > second) {
+        } else if (sum >= second) {
             third = second;
             second = sum;
-        } else if (sum > third) {
+        } else if (sum >= third) {
             third = sum;
         }
 
