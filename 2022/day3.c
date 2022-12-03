@@ -57,19 +57,17 @@ void part2(void) {
     int sum = 0;
     int breaktime;
 
-    int counter = 0;
     char buffer1[size];
     char buffer2[size];
     char buffer3[size];
     while (fscanf(fp, "%s %s %s", &buffer1, &buffer2, &buffer3) != EOF) {
         breaktime = FALSE;
-        printf("counter: %d", counter);
-        printf("%s\n%s\n%s\n", buffer1, buffer2, buffer3);
+        // printf("%s\n%s\n%s\n", buffer1, buffer2, buffer3);
         for (int i = 0; i < strlen(buffer1); i++) {
             for (int j = 0; j < strlen(buffer2); j++) {
                 for (int k = 0; k < strlen(buffer3); k++) {
                     if (buffer1[i] == buffer2[j] && buffer1[i] == buffer3[k]) {
-                        printf("buff[i]: %c\n\n", buffer1[i]);
+                        // printf("buff[i]: %c\n\n", buffer1[i]);
                         if (buffer1[i] >= 'a') {
                             sum += buffer1[i] - 'a' + 1;
                         } else if (buffer1[i] <= 'Z') {
