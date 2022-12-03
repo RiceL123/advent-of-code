@@ -3,8 +3,10 @@ import re
 dictionary = {'A': 'X', 'B': 'Y', 'C': 'Z', 
               'X': 1, 'Y': 2, 'Z': 3}
 
-# if you want to lose then (- 1 % 3)
-# if you want to win then (+1 % 3)
+letter_to_num = {'A': 1, 'B': 2, 'C': 3}
+
+# if you want to lose then (+ 1 % 3)
+# if you want to win then (if index = 0 then then choose 3, else -1 to index)
 # if you want to tie then keep the same
 array = ['A', 'B', 'C']
 
@@ -18,7 +20,7 @@ with open("day2.txt") as f:
     for line in f:
         
         letters = line.split()
-        # lose so - 1 % 3
+        #lose so - 1 % 3
         if letters[1] == 'X':
             for i in range(3):
                 if array[i] == letters[0]:
@@ -26,8 +28,9 @@ with open("day2.txt") as f:
                     # print(f"{array[i]} -> lose -> {array[(i + 1) % 3]}: {letters[1]}")
         # draw
         elif letters[1] == 'Y':
+            # print(f"{letters[0]} -> draw -> {letters[0]}: {dictionary[letters[0]]}")
             letters[1] = dictionary[letters[0]]
-        # win so + 1 % 3
+        # win + 1 % 3
         elif letters[1] == 'Z':
             for i in range(3):
                 if array[i] == letters[0]:
@@ -37,15 +40,7 @@ with open("day2.txt") as f:
         sum += dictionary[letters[1]]
         if (letter_dict[letters[1]] == letters[0]):
             sum += 3
-        elif (letters[0] == 'A'):
-             if (letters[1] == 'Y'):
-                sum += 6
-        elif (letters[0] == 'B'):
-            if (letters[1] == 'Z'):
-                sum += 6
-        elif (letters[0] == 'C'):
-            if (letters[1] == 'X'):
-                sum += 6
-                
-
+        elif ((letter_to_num[letters[0]] % 3) - dictionary[letters[1]] == -1) :
+            sum += 6
+            
 print(sum)
