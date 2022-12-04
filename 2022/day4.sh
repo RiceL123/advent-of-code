@@ -1,3 +1,5 @@
+#!/bin/sh
+
 file="day4.txt"
 
 # part 1
