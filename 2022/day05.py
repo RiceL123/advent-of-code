@@ -15,6 +15,7 @@ for i in range(numoflists):
 with open(file) as f:
     init = True
     for line in f:
+        # initializing the list of lists/ list of stacks
         if init == True:
             if (line[0:3] == ' 1 '):
                 # for i in range(numoflists):
@@ -26,15 +27,21 @@ with open(file) as f:
                     stack = (i - 1) % 4
                     if stack == 0 and line[i] != '' and line[i] != ' ':
                         listoflists[int((i - 1) / 4)].append(line[i])
-                        #print(f"character: {line[i]} and i: {i} so append to list[{int((i - 1) / 4)}]")
                     i+=1
+        # init is complete time to move the boxes around
         else:
             result = re.match(r"move ([0-9]+) from ([0-9]+) to ([0-9]+)", line)
             if (result != None):
-                # print(f"{result.group(1)} item: list[{int(result.group(2)) - 1}] to list[{int(result.group(3)) - 1}]")
-                for i in range(int(result.group(1))):
-                    listoflists[int(result.group(3)) - 1].insert(0, listoflists[int(result.group(2)) - 1].pop(0))
+                ### part 1 ###
+                # for i in range(int(result.group(1))):
+                #     listoflists[int(result.group(3)) - 1].insert(0, listoflists[int(result.group(2)) - 1].pop(0))
+
+                ### part 2 ###
+                i = int(result.group(1)) - 1
+                while i >= 0:
+                    listoflists[int(result.group(3)) - 1].insert(0, listoflists[int(result.group(2)) - 1].pop(i))
+                    i-=1
 
     for i in range(numoflists):
-        print(listoflists[i].pop(0), end='')
+        print(listoflists[i][0], end='')
     print('')
