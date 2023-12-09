@@ -44,13 +44,12 @@ fn part1(lines: &Vec<Vec<i32>>) -> i64 {
         .iter()
         .map(|nums| {
             let len = nums.len();
-            let xs = (1..=len).map(|x| x as f64).collect::<Vec<f64>>();
+            let xs = (0..len).map(|x| x as f64).collect::<Vec<f64>>();
             let ys = nums.into_iter().map(|x| *x as f64).collect::<Vec<f64>>();
 
-            let res = polynomial_interpolation(&xs, &ys, len - 1, (len + 1) as f64);
+            let res = polynomial_interpolation(&xs, &ys, len - 1, len as f64);
 
-            res
+            res.round() as i64
         })
-        .fold(0.0, |acc, e| acc + e)
-        .round() as i64
+        .sum()
 }
