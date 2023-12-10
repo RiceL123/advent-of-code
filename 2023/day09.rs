@@ -56,6 +56,7 @@ fn part1(lines: &Vec<Vec<i32>>) -> i64 {
         .sum()
 }
 
+// literally just part 1 but last argument for polynominal_interpolation is -1
 fn part2(lines: &Vec<Vec<i32>>) -> i64 {
     lines
         .iter()
