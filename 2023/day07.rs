@@ -3,33 +3,15 @@ use std::collections::HashMap;
 
 #[aoc(day7, part1)]
 pub fn part1(input: &str) -> u64 {
-    let mut cards = input
-        .split("\n")
-        .into_iter()
-        .map(|line: &str| {
-            let tuple = line.splitn(2, " ").collect::<Vec<&str>>();
-
-            (
-                Hand::new(tuple[0]),
-                tuple[1].parse::<u64>().expect("bid amount = NaN"),
-            )
-        })
-        .collect::<Vec<(Hand, u64)>>();
-
-    cards.sort_by(|a, b| b.0.compare(&a.0, "AKQJT98765432"));
-
-    let sum = cards
-        .iter()
-        .enumerate()
-        .fold(0, |acc, (i, (_, bid))| acc + bid * (i as u64 + 1));
-
-    println!("{:?}", sum);
-
-    sum
+    process_input(input, Hand::new, "AKQJT98765432")
 }
 
 #[aoc(day7, part2)]
 pub fn part2(input: &str) -> u64 {
+    process_input(input, Hand::new_wild_card, "AKQT98765432J")
+}
+
+fn process_input<'a>(input: &'a str, constructor: fn(&'a str) -> Hand<'a>, face_order: &str) -> u64 {
     let mut cards = input
         .split("\n")
         .into_iter()
@@ -37,13 +19,13 @@ pub fn part2(input: &str) -> u64 {
             let tuple = line.splitn(2, " ").collect::<Vec<&str>>();
 
             (
-                Hand::new_wild_card(tuple[0]),
+                constructor(tuple[0]),
                 tuple[1].parse::<u64>().expect("bid amount = NaN"),
             )
         })
         .collect::<Vec<(Hand, u64)>>();
 
-    cards.sort_by(|a, b| b.0.compare(&a.0, "AKQT98765432J"));
+    cards.sort_by(|a, b| b.0.compare(&a.0, face_order));
 
     let sum = cards
         .iter()
