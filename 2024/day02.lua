@@ -1,9 +1,19 @@
+#!/bin/lua
+
 function table.copy(t)
     local t2 = {}
     for k,v in pairs(t) do
         t2[k] = v
     end
     return t2
+end
+
+function line_to_report(line)
+    report = {}
+    for token in string.gmatch(line, "[^%s]+") do
+        table.insert(report, tonumber(token))
+    end
+    return report
 end
 
 function is_in_bounds(arr, bound_lower, bound_upper)
@@ -14,14 +24,6 @@ function is_in_bounds(arr, bound_lower, bound_upper)
         end
     end
     return true
-end
-
-function line_to_report(line)
-    report = {}
-    for token in string.gmatch(line, "[^%s]+") do
-        table.insert(report, tonumber(token))
-    end
-    return report
 end
 
 function is_safe(report)
@@ -36,7 +38,6 @@ function part1()
             n_safe = n_safe + 1
         end
     end
-
     print(n_safe)
 end
 
