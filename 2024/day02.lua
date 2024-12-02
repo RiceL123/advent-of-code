@@ -6,6 +6,16 @@ function table.copy(t)
     return t2
 end
 
+function is_in_bounds(arr, bound_lower, bound_upper)
+    for i=1,#arr - 1 do
+        difference = arr[i] - arr[i + 1]
+        if not (difference >= bound_lower and difference <= bound_upper) then
+            return false
+        end
+    end
+    return true
+end
+
 function line_to_report(line)
     report = {}
     for token in string.gmatch(line, "[^%s]+") do
@@ -15,25 +25,7 @@ function line_to_report(line)
 end
 
 function is_safe(report)
-    increasing = true
-    for i=1,#report - 1 do
-        difference = report[i] - report[i + 1]
-        if not (difference >= 1 and difference <= 3) then
-            increasing = false
-            break
-        end
-    end
-
-    decreasing = true
-    for i=1,#report - 1 do
-        difference = report[i + 1] - report[i]
-        if not (difference >= 1 and difference <= 3) then
-            decreasing = false
-            break
-        end
-    end
-
-    return increasing or decreasing
+    return is_in_bounds(report, -3, -1) or is_in_bounds(report, 1, 3)
 end
 
 function part1()
