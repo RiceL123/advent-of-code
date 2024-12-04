@@ -85,6 +85,7 @@ func x_mas_appears(row int, col int, letter rune, word_search []string) int {
 				col_i < 0 || col_i >= col_len ||
 				rune(word_search[row_i][col_i]) != chars[j] {
 				is_matching = false
+				break
 			}
 		}
 
