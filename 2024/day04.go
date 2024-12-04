@@ -52,7 +52,9 @@ func xmas_appears(row int, col int, letter rune, word_search []string) int {
 		if All(chars, func(index int, char rune) bool {
 			i := row + direction[0]*(index+1)
 			j := col + direction[1]*(index+1)
-			return i >= 0 && i < row_len && j >= 0 && j < col_len && char == rune(word_search[i][j])
+			return i >= 0 && i < row_len &&
+				j >= 0 && j < col_len &&
+				char == rune(word_search[i][j])
 		}) {
 			matches += 1
 		}
@@ -76,10 +78,12 @@ func x_mas_appears(row int, col int, letter rune, word_search []string) int {
 	directions := [][2]int{{1, 1}, {1, -1}, {-1, -1}, {-1, 1}}
 	for i := 0; i < len(directions); i++ {
 		is_matching := true
-		for j := 0; j < 4; j++ {
+		for j := 0; j < len(chars); j++ {
 			row_i := row + (directions[(i+j)%len(directions)][0])
 			col_i := col + (directions[(i+j)%len(directions)][1])
-			if row_i < 0 || row_i >= row_len || col_i < 0 || col_i >= col_len || rune(word_search[row_i][col_i]) != chars[j] {
+			if row_i < 0 || row_i >= row_len ||
+				col_i < 0 || col_i >= col_len ||
+				rune(word_search[row_i][col_i]) != chars[j] {
 				is_matching = false
 			}
 		}
