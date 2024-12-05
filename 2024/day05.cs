@@ -149,8 +149,8 @@ class Day05
         return updates.Aggregate(0, (acc, update) =>
         {
             var isCorrectOrder = update.pages
-    .Zip(update.pages.Skip(1), (current, next) => is_correct_order(current, [next], rules))
-    .All(result => result);
+                .Zip(update.pages.Skip(1), (current, next) => is_correct_order(current, [next], rules))
+                .All(result => result);
 
             return !isCorrectOrder ? acc + sorted_middle(update.pages, rules) : acc;
         });
