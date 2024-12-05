@@ -1,10 +1,7 @@
-using System.Data;
-
 class Day05
 {
     public record Ordering(List<int> before, List<int> after);
     public record Update_Pages(int[] pages, int middle);
-    Dictionary<int, Ordering> ordering_rules = new Dictionary<int, Ordering>();
 
     static void Main(string[] args)
     {
@@ -50,24 +47,6 @@ class Day05
 
     static Update_Pages[] string_to_updates(string text)
     {
-        // List<Update_Pages> updates = new List<Update_Pages>();
-
-        // foreach (var line in text.Split('\n'))
-        // {
-        //     if (line == "")
-        //     {
-        //         return updates.ToArray();
-        //     }
-
-        //     var update_pages = line.Split(',').Select((str, _) => int.Parse(str)).ToArray();
-
-        //     var middle = update_pages[update_pages.Length / 2];
-
-        //     updates.Add(new Update_Pages(update_pages, middle));
-        // }
-
-        // return updates.ToArray();
-
         return text
             .Split("\n")
             .Select((line, index) =>
@@ -82,27 +61,6 @@ class Day05
 
     static int part1(Dictionary<int, Ordering> rules, Update_Pages[] updates)
     {
-        // var count = 0;
-        // foreach (var update in updates)
-        // {
-        //     var correct = true;
-        //     for (int i = 0; i < update.pages.Length - 1; i++)
-        //     {
-        //         if (!is_correct_order(update.pages[i], update.pages.Skip(i + 1).ToArray(), rules))
-        //         {
-        //             correct = false;
-        //             break;
-        //         }
-        //     }
-
-        //     if (correct)
-        //     {
-        //         count += update.middle;
-        //     }
-        // }
-
-        // return count;
-
         return updates.Aggregate(0, (count, update) =>
         {
             var isCorrectOrder = update.pages
@@ -125,27 +83,6 @@ class Day05
 
     static int part2(Dictionary<int, Ordering> rules, Update_Pages[] updates)
     {
-        // var count = 0;
-        // foreach (var update in updates)
-        // {
-        //     var correct = true;
-        //     for (int i = 0; i < update.pages.Length - 1; i++)
-        //     {
-        //         if (!is_correct_order(update.pages[i], update.pages.Skip(i + 1).ToArray(), rules))
-        //         {
-        //             correct = false;
-        //             break;
-        //         }
-        //     }
-
-        //     if (!correct)
-        //     {
-        //         count += sorted_middle(update.pages, rules);
-        //     }
-        // }
-
-        // return count;
-
         return updates.Aggregate(0, (acc, update) =>
         {
             var isCorrectOrder = update.pages
