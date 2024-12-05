@@ -1,6 +1,6 @@
 class Day05
 {
-    public record Ordering(List<int> before, List<int> after);
+    public record Ordering(List<int> before);
     public record Update_Pages(int[] pages, int middle);
 
     static void Main(string[] args)
@@ -23,22 +23,13 @@ class Day05
             var before = rules[0];
             var after = rules[1];
 
-            if (ordering_rules.TryGetValue(before, out var ordering_before))
-            {
-                ordering_before.after.Add(after);
-            }
-            else
-            {
-                ordering_rules.Add(before, new([], [after]));
-            }
-
             if (ordering_rules.TryGetValue(after, out var ordering_after))
             {
                 ordering_after.before.Add(before);
             }
             else
             {
-                ordering_rules.Add(after, new([before], []));
+                ordering_rules.Add(after, new([before]));
             }
         }
 
@@ -75,7 +66,7 @@ class Day05
     {
         if (rules.TryGetValue(head, out var head_ordering))
         {
-            return tail.All(head_ordering.after.Contains);
+            return !tail.All(head_ordering.before.Contains);
         }
 
         return true;
@@ -98,12 +89,8 @@ class Day05
         var sorted_list = pages.ToList();
         sorted_list.Sort((int a, int b) =>
         {
-            if (rules.TryGetValue(a, out var a_ordering))
-            {
-                if (a_ordering.after.Contains(b)) { return 1; }
-                if (a_ordering.before.Contains(b)) { return -1; }
-            }
-
+            if (rules.TryGetValue(a, out var a_ord) && a_ord.before.Contains(b)) { return 1; }
+            if (rules.TryGetValue(b, out var b_ord) && b_ord.before.Contains(a)) { return -1; }
             return 0;
         });
         return sorted_list[pages.Length / 2];
