@@ -14,16 +14,14 @@ using namespace std;
 
 tuple<vector<string>, tuple<int, int, tuple<int, int>>> file_to_vector(const char *file_path);
 
-int part1(tuple<int, int, tuple<int, int>> &pos, vector<string> &lines);
+int part1(tuple<int, int, tuple<int, int>> pos, vector<string> &lines);
 int part2(tuple<int, int, tuple<int, int>> &pos, vector<string> &lines);
 
 int main()
 {
     auto [lines, pos] = file_to_vector("./day06.txt");
 
-    auto pos_clone = pos;
-    cout << "part1: " << part1(pos_clone, lines) << endl;
-
+    cout << "part1: " << part1(pos, lines) << endl;
     cout << "part2: " << part2(pos, lines) << endl;
 
     return 0;
@@ -50,67 +48,23 @@ tuple<vector<string>, tuple<int, int, tuple<int, int>>> file_to_vector(const cha
     return {lines, pos};
 }
 
-tuple<char, char> move_forward(tuple<int, int, tuple<int, int>> &pos)
+void move_forward(tuple<int, int, tuple<int, int>> &pos)
 {
-    int row = get<0>(pos);
-    int col = get<1>(pos);
-    int d_row = get<0>(get<2>(pos));
-    int d_col = get<1>(get<2>(pos));
-
-    // Update position
-    get<0>(pos) = row + d_row;
-    get<1>(pos) = col + d_col;
-
-    if (d_row == -1 && d_col == 0)
-    {
-        return {'^', '|'};
-    }
-    else if (d_row == 1 && d_col == 0)
-    {
-        return {'V', '|'};
-    }
-    else if (d_row == 0 && d_col == 1)
-    {
-        return {'>', '-'};
-    }
-    else if (d_row == 0 && d_col == -1)
-    {
-        return {'<', '-'};
-    }
-
-    return {'.', '.'};
+    get<0>(pos) += get<0>(get<2>(pos));
+    get<1>(pos) += get<1>(get<2>(pos));
 }
 
 void rotate_clockwise(tuple<int, int, tuple<int, int>> &pos)
 {
     int d_row = get<0>(get<2>(pos));
     int d_col = get<1>(get<2>(pos));
-    if (d_row == -1 && d_col == 0)
-    {
-        get<2>(pos) = make_tuple(0, 1);
-    }
-    else if (d_row == 1 && d_col == 0)
-    {
-        get<2>(pos) = make_tuple(0, -1);
-    }
-    else if (d_row == 0 && d_col == 1)
-    {
-        get<2>(pos) = make_tuple(1, 0);
-    }
-    else if (d_row == 0 && d_col == -1)
-    {
-        get<2>(pos) = make_tuple(-1, 0);
-    }
+    get<2>(pos) = make_tuple(d_col, -d_row);
 }
 
 bool move_guard(tuple<int, int, tuple<int, int>> &pos, vector<string> &map)
 {
-    int row = get<0>(pos);
-    int col = get<1>(pos);
-    int d_row = get<0>(get<2>(pos));
-    int d_col = get<1>(get<2>(pos));
-
-    // Check bounds
+    auto [row, col, direction] = pos;
+    auto [d_row, d_col] = direction;
 
     if (row + d_row < 0 || row + d_row >= map.size() ||
         col + d_col < 0 || col + d_col >= map.front().size())
@@ -119,23 +73,20 @@ bool move_guard(tuple<int, int, tuple<int, int>> &pos, vector<string> &map)
         return false;
     }
 
-    // Check the next position
     if (map[row + d_row][col + d_col] == '#')
     {
         rotate_clockwise(pos);
     }
     else
     {
-        // Move forward
-        map[row][col] = 'X'; // Mark the old position
-        auto [guard, _] = move_forward(pos);
-        map[row + d_row][col + d_col] = guard;
+        map[row][col] = 'X';
+        move_forward(pos);
     }
 
     return true;
 }
 
-int part1(tuple<int, int, tuple<int, int>> &pos, vector<string> &lines)
+int part1(tuple<int, int, tuple<int, int>> pos, vector<string> &lines)
 {
     while (move_guard(pos, lines))
     {
@@ -151,45 +102,35 @@ int part1(tuple<int, int, tuple<int, int>> &pos, vector<string> &lines)
     return distinct_moves;
 }
 
-tuple<bool, int> move_guard2(tuple<int, int, tuple<int, int>> &pos, vector<string> &map, vector<tuple<int, int, tuple<int, int>>> &visited)
+tuple<bool, bool> move_guard2(tuple<int, int, tuple<int, int>> &pos, vector<string> &map, vector<tuple<int, int, tuple<int, int>>> &visited)
 {
-    int row = get<0>(pos);
-    int col = get<1>(pos);
-    int d_row = get<0>(get<2>(pos));
-    int d_col = get<1>(get<2>(pos));
+    auto [row, col, direction] = pos;
+    auto [d_row, d_col] = direction;
 
     if (find(visited.begin(), visited.end(), pos) != visited.end())
     {
-        return {false, 2};
+        return {false, true};
     }
 
-    // Check bounds
     if (row + d_row < 0 || row + d_row >= map.size() ||
         col + d_col < 0 || col + d_col >= map.front().size())
     {
         map[row][col] = 'X';
-        return {true, 0};
+        return {true, false};
     }
 
-    // Check the next position
     if (map[row + d_row][col + d_col] == '#' || map[row + d_row][col + d_col] == 'O')
     {
-        // Turn clockwise
-        map[row][col] = '+';
         rotate_clockwise(pos);
-        if (map[row + d_row][col + d_col] == 'O')
-        {
-            // return {false, 1};
-        }
     }
     else
     {
-        // Move forward
-        auto [guard_char, prev_char] = move_forward(pos);
-        map[row][col] = prev_char;
+        move_forward(pos);
+        map[row][col] = 'X';
         visited.push_back(make_tuple(row, col, make_tuple(d_row, d_col)));
     }
-    return {false, 0};
+
+    return {false, false};
 }
 
 bool creates_cycle(tuple<int, int> obstacle_pos, tuple<int, int, tuple<int, int>> pos, vector<string> lines)
@@ -204,24 +145,19 @@ bool creates_cycle(tuple<int, int> obstacle_pos, tuple<int, int, tuple<int, int>
 
     vector<tuple<int, int, tuple<int, int>>> visited;
 
-    int obstacle_hits = 0;
     for (;;)
     {
-        auto [left_map, hit] = move_guard2(pos, lines, visited);
-        obstacle_hits += hit;
+        auto [left_map, cycle] = move_guard2(pos, lines, visited);
         if (left_map)
         {
-            lines[o_row][o_col] = '.';
             return false;
         }
-        if (obstacle_hits > 1)
+        if (cycle)
         {
-            lines[o_row][o_col] = '.';
             return true;
         }
     }
 
-    lines[o_row][o_col] = '.';
     return true;
 }
 
@@ -245,7 +181,7 @@ int part2(tuple<int, int, tuple<int, int>> &pos, vector<string> &lines)
                 {
                     if (lines[i][j] == 'X')
                     {
-                        cout << "trying obstacle at: " << i << ", " << j << " obstructions: " << obstructions << endl;
+                        // cout << "trying obstacle at: " << i << ", " << j << " obstructions: " << obstructions << endl;
                         if (creates_cycle({i, j}, pos, lines))
                         {
                             obstructions++;
