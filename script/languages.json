@@ -1,0 +1,94 @@
+{
+  "Ada": {
+    "color": "#02f88c",
+    "extensions": [".adb", ".ada", ".ads"]
+  },
+  "Assembly": {
+    "color": "#6E4C13",
+    "extensions": [".asm", ".a51", ".i", ".inc", ".nas", ".nasm"]
+  },
+  "C": {
+    "color": "#555555",
+    "extensions": [".c", ".h"]
+  },
+  "C#": {
+    "color": "#178600",
+    "extensions": [".cs"]
+  },
+  "C++": {
+    "color": "#f34b7d",
+    "extensions": [".cpp"]
+  },
+  "Elixir": {
+    "color": "#6e4a7e",
+    "extensions": [".ex"]
+  },
+  "Go": {
+    "color": "#00ADD8",
+    "extensions": [".go"]
+  },
+  "Haskell": {
+    "color": "#5e5086",
+    "extensions": [".hs"]
+  },
+  "Java": {
+    "color": "#b07219",
+    "extensions": [".java"]
+  },
+  "JavaScript": {
+    "color": "#f1e05a",
+    "extensions": [".js"]
+  },
+  "Julia": {
+    "color": "#a270ba",
+    "extensions": [".jl"]
+  },
+  "Kotlin": {
+    "color": "#A97BFF",
+    "extensions": [".kt"]
+  },
+  "Lua": {
+    "color": "#000080",
+    "extensions": [".lua"]
+  },
+  "OCaml": {
+    "color": "#ef7a08",
+    "extensions": [".ml"]
+  },
+  "Python": {
+    "color": "#3572A5",
+    "extensions": [".py"]
+  },
+  "R": {
+    "color": "#198CE7",
+    "extensions": [".r"]
+  },
+  "Ruby": {
+    "color": "#701516",
+    "extensions": [".rb"]
+  },
+  "Rust": {
+    "color": "#dea584",
+    "extensions": [".rs"]
+  },
+  "SQL": {
+    "color": "#e38c00",
+    "extensions": [".sql"]
+  },
+  "Shell": {
+    "color": "#89e051",
+    "extensions": [".sh"]
+  },
+  "Swift": {
+    "color": "#F05138",
+    "extensions": [".swift"]
+  },
+  "TypeScript": {
+    "color": "#3178c6",
+    "extensions": [".ts"]
+  },
+  "Zig": {
+    "color": "#ec915c",
+    "extensions": [".zig"]
+  }
+}
