@@ -36,6 +36,7 @@ jobs:
         run: |
           git checkout main
           git reset --hard HEAD
+          git pull
           git add README.md
           git commit --amend --no-edit
           git push
