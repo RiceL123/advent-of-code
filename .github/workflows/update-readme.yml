@@ -35,6 +35,7 @@ jobs:
       - name: Squash commit
         run: |
           git checkout main
+          git reset --hard HEAD
           git add README.md
           git commit --amend --no-edit
           git push
