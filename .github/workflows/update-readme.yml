@@ -38,5 +38,6 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
           git add README.md
+          git clean -f -d
           git commit --amend --no-edit
           git push
