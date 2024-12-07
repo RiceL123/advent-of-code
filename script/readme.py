@@ -4,7 +4,7 @@ import os
 import json
 from collections import defaultdict
 
-with open("languages.json", "r") as f:
+with open("script/languages.json", "r") as f:
     languages = json.load(f)
 
 extension_to_language = {
