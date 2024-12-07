@@ -20,7 +20,8 @@ jobs:
 
       - name: Run script to update README
         run: |
-          python script/readme.py
+          cd script
+          python readme.py
 
       - name: Configure Git
         run: |
@@ -32,4 +33,4 @@ jobs:
           git checkout main
           git add README.md
           git commit --amend --no-edit
-          git push origin main --force
+          git push

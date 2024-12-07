@@ -4,7 +4,7 @@ import os
 import json
 from collections import defaultdict
 
-with open("script/languages.json", "r") as f:
+with open("./languages.json", "r") as f:
     languages = json.load(f)
 
 extension_to_language = {
@@ -55,7 +55,9 @@ for directory in directories:
     ])
     html_template += '</ul>\n'
 
-readme_file = "README.md"
+print(f"Appending: \n {html_template}")
+
+readme_file = "../README.md"
 
 with open(readme_file, "r") as file:
     readme_content = file.read()
