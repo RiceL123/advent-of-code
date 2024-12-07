@@ -55,7 +55,7 @@ for directory in directories:
     ])
     html_template += '</ul>\n'
 
-readme_file = "../README.md"
+readme_file = "README.md"
 
 with open(readme_file, "r") as file:
     readme_content = file.read()
