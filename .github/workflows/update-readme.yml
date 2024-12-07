@@ -1,0 +1,35 @@
+name: Update README with Languages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.x"
+
+      - name: Run script to update README
+        run: |
+          python script/readme.py
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Squash commit
+        run: |
+          git checkout main
+          git add README.md
+          git commit --amend --no-edit
+          git push origin main --force
