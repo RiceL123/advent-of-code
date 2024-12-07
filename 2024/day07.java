@@ -84,7 +84,7 @@ class Day07 {
         Operation[] operations = new Operation[nums.length - 1];
         Arrays.fill(operations, Operation.Add);
 
-        while (true) {
+        for (int l = 0; l < operations.length; l++) {
             boolean addAnotherMul = false;
 
             for (Operation[] perm : operationPermutations(operations, operation_options)) {
@@ -103,19 +103,8 @@ class Day07 {
             if (!addAnotherMul) {
                 return 0L;
             }
-
-            boolean changed = false;
-            for (int i = 0; i < operations.length; i++) {
-                if (operations[i] == Operation.Add) {
-                    operations[i] = Operation.Mul;
-                    changed = true;
-                    break;
-                }
-            }
-
-            if (!changed) {
-                return 0L;
-            }
         }
+
+        return 0L;
     }
 }
