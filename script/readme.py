@@ -16,7 +16,7 @@ extension_to_language = {
 parent_dir = os.path.join(os.pardir)
 directories = [d for d in os.listdir(parent_dir) if d.isdigit() and len(d) == 4]
 
-image_references = ""
+image_references = []
 
 for directory in directories:
     dir_path = os.path.join(parent_dir, directory)
@@ -56,11 +56,11 @@ for directory in directories:
         
         ax.text(angle_mid, 1, label, horizontalalignment='center', verticalalignment='center', alpha=.5,
                 color='black', fontsize=10, fontweight='bold', zorder=10, 
-                rotation_mode='anchor', position=(angle_mid + 0.005, 1.35)) 
+                rotation_mode='anchor', position=(angle_mid + 0.005, 1.1)) 
         
         ax.text(angle_mid, 1, label, horizontalalignment='center', verticalalignment='center', 
                 color='white', fontsize=10, fontweight='bold', zorder=20, 
-                rotation_mode='anchor', position=(angle_mid, 1.35))
+                rotation_mode='anchor', position=(angle_mid, 1.1))
     
     ax.set_axis_off()
     fig.patch.set_facecolor('none')  
@@ -74,7 +74,7 @@ for directory in directories:
     plt.savefig(output_file, format='svg', transparent=True) 
     
     image_reference = f"![Languages Progress](script/{output_file})"
-    image_references += f"### {directory}\n" + image_reference + '\n'
+    image_references.append(f"### {directory}\n" + image_reference)
     print(f"Added image reference for {directory}: {image_reference}")
 
 readme_file = "../README.md"
@@ -88,7 +88,7 @@ if section_start != -1:
     updated_readme_content = (
         readme_content[:section_start] +
         "## Languages\n" +
-        image_references +
+        "\n".join(sorted(image_references, reverse=True)) +
         readme_content[section_end:]
     )
 

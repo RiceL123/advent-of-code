@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2024-12-08T04:21:17.610674</dc:date>
+    <dc:date>2024-12-08T04:52:07.540658</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -42,7 +42,7 @@ C 206.644887 26.684876 223.543845 28.66962 238.838264 35.27507
 C 254.132683 41.880521 267.163359 52.821977 276.315007 66.743134 
 C 285.466654 80.66429 290.344828 96.965131 290.344828 113.625 
 z
-" clip-path="url(#p3cc41adc84)" style="fill: #3572a5"/>
+" clip-path="url(#p78c0c2b2a5)" style="fill: #3572a5"/>
    </g>
    <g id="patch_3">
     <path d="M 164.041708 70.134188 
@@ -64,7 +64,7 @@ C 122.702034 139.190715 119.935339 127.429508 119.675368 115.481548
 C 119.415397 103.533587 121.6679 91.663169 126.286634 80.64098 
 C 130.905367 69.618792 137.788163 59.688649 146.488154 51.495269 
 z
-" clip-path="url(#p3cc41adc84)" style="fill: #555555"/>
+" clip-path="url(#p78c0c2b2a5)" style="fill: #555555"/>
    </g>
    <g id="patch_4">
     <path d="M 254.020295 147.772372 
@@ -74,11 +74,11 @@ L 290.344828 113.625
 C 290.344828 122.296161 289.023323 130.916899 286.425893 139.18989 
 C 283.828462 147.462882 279.985313 155.291911 275.028993 162.406961 
 z
-" clip-path="url(#p3cc41adc84)" style="fill: #89e051"/>
+" clip-path="url(#p78c0c2b2a5)" style="fill: #89e051"/>
    </g>
    <g id="text_1">
     <!-- Python (37.0%) -->
-    <g style="opacity: 0.5" transform="translate(206.533476 10.345822) scale(0.1 -0.1)">
+    <g style="opacity: 0.5" transform="translate(198.171952 29.975357) scale(0.1 -0.1)">
      <defs>
       <path id="DejaVuSans-Bold-50" d="M 588 4666 
 L 2584 4666 
@@ -367,7 +367,7 @@ z
    </g>
    <g id="text_2">
     <!-- C (53.3%) -->
-    <g style="opacity: 0.5" transform="translate(102.842592 203.991224) scale(0.1 -0.1)">
+    <g style="opacity: 0.5" transform="translate(116.700156 187.767733) scale(0.1 -0.1)">
      <defs>
       <path id="DejaVuSans-Bold-43" d="M 4288 256 
 Q 3956 84 3597 -3 
@@ -429,7 +429,7 @@ z
    </g>
    <g id="text_3">
     <!-- Shell (9.7%) -->
-    <g style="opacity: 0.5" transform="translate(280.938331 150.346923) scale(0.1 -0.1)">
+    <g style="opacity: 0.5" transform="translate(260.550156 144.057562) scale(0.1 -0.1)">
      <defs>
       <path id="DejaVuSans-Bold-53" d="M 3834 4519 
 L 3834 3531 
@@ -541,7 +541,7 @@ z
    </g>
    <g id="text_4">
     <!-- Python (37.0%) -->
-    <g style="fill: #ffffff" transform="translate(207.062906 10.572907) scale(0.1 -0.1)">
+    <g style="fill: #ffffff" transform="translate(198.60334 30.16039) scale(0.1 -0.1)">
      <use xlink:href="#DejaVuSans-Bold-50"/>
      <use xlink:href="#DejaVuSans-Bold-79" x="75.166016"/>
      <use xlink:href="#DejaVuSans-Bold-74" x="140.351562"/>
@@ -560,7 +560,7 @@ z
    </g>
    <g id="text_5">
     <!-- C (53.3%) -->
-    <g style="fill: #ffffff" transform="translate(102.405495 203.615976) scale(0.1 -0.1)">
+    <g style="fill: #ffffff" transform="translate(116.344003 187.461976) scale(0.1 -0.1)">
      <use xlink:href="#DejaVuSans-Bold-43"/>
      <use xlink:href="#DejaVuSans-Bold-20" x="73.388672"/>
      <use xlink:href="#DejaVuSans-Bold-28" x="108.203125"/>
@@ -574,7 +574,7 @@ z
    </g>
    <g id="text_6">
     <!-- Shell (9.7%) -->
-    <g style="fill: #ffffff" transform="translate(280.767142 150.896977) scale(0.1 -0.1)">
+    <g style="fill: #ffffff" transform="translate(260.410669 144.505754) scale(0.1 -0.1)">
      <use xlink:href="#DejaVuSans-Bold-53"/>
      <use xlink:href="#DejaVuSans-Bold-68" x="72.021484"/>
      <use xlink:href="#DejaVuSans-Bold-65" x="143.212891"/>
@@ -592,7 +592,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p3cc41adc84">
+  <clipPath id="p78c0c2b2a5">
    <path d="M 291.625 113.625 
 C 291.625 102.249509 289.384276 90.984631 285.031065 80.475048 
 C 280.677853 69.965465 274.296812 60.415562 266.253125 52.371875 

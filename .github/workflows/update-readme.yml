@@ -17,27 +17,29 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.x"
-
+      
       - name: Install dependencies
         run: |
           pip install matplotlib
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+      
+      - name: Ensure branch is up-to-date
+        run: |
+          git checkout main
+          git fetch origin main
+          git pull origin main
 
       - name: Run script to update README
         run: |
           cd script
           python readme.py
 
-      - name: Configure Git
+      - name: Commit and push changes
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-      - name: Squash commit
-        run: |
-          git checkout main
-          git fetch origin main
-          git reset --hard origin/main
-          git add README.md
-          git clean -f -d
-          git commit --amend --no-edit
-          git push
+          git add README.md script/2022.svg script/2023.svg script/2024.svg
+          git commit -m "Update README and language visuals [ci skip]" || echo "No changes to commit"
+          git push origin main
