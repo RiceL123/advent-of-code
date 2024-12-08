@@ -4,6 +4,7 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import date
 from collections import defaultdict
 
 with open("./languages.json", "r") as f:
@@ -14,7 +15,7 @@ extension_to_language = {
 }
 
 parent_dir = os.path.join(os.pardir)
-directories = [d for d in os.listdir(parent_dir) if d.isdigit() and len(d) == 4]
+directories = [d for d in os.listdir(parent_dir) if d == str(date.today().year)]
 
 image_references = []
 
@@ -77,22 +78,22 @@ for directory in directories:
     image_references.append(f"### {directory}\n" + image_reference)
     print(f"Added image reference for {directory}: {image_reference}")
 
-readme_file = "../README.md"
-with open(readme_file, "r") as file:
-    readme_content = file.read()
+# readme_file = "../README.md"
+# with open(readme_file, "r") as file:
+#     readme_content = file.read()
 
-section_start = readme_content.find("## Languages")
-if section_start != -1:
-    section_end = len(readme_content)
+# section_start = readme_content.find("## Languages")
+# if section_start != -1:
+#     section_end = len(readme_content)
 
-    updated_readme_content = (
-        readme_content[:section_start] +
-        "## Languages\n" +
-        "\n".join(sorted(image_references, reverse=True)) +
-        readme_content[section_end:]
-    )
+#     updated_readme_content = (
+#         readme_content[:section_start] +
+#         "## Languages\n" +
+#         "\n".join(sorted(image_references, reverse=True)) +
+#         readme_content[section_end:]
+#     )
 
-with open(readme_file, "w") as file:
-    file.write(updated_readme_content)
+# with open(readme_file, "w") as file:
+#     file.write(updated_readme_content)
 
-print("README.md has been updated.")
+# print("README.md has been updated.")

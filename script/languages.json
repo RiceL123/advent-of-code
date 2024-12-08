@@ -31,6 +31,10 @@
     "color": "#5e5086",
     "extensions": [".hs"]
   },
+  "HolyC": {
+    "color": "#ffefaf",
+    "extensions": [".hc"]
+  },
   "Java": {
     "color": "#b07219",
     "extensions": [".java"]
