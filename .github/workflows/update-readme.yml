@@ -41,5 +41,5 @@ jobs:
       - name: Commit and push changes
         run: |
           git add README.md script/2022.svg script/2023.svg script/2024.svg
-          git commit --amend --no-edit
+          git commit -m'workflow README.md script'
           git push origin main
