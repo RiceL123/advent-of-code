@@ -41,5 +41,5 @@ jobs:
       - name: Commit and push changes
         run: |
           git add README.md script/2022.svg script/2023.svg script/2024.svg
-          git commit -m "Update README and language visuals [ci skip]" || echo "No changes to commit"
+          git commit --amend --no-edit
           git push origin main

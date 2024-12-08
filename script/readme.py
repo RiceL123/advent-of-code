@@ -39,7 +39,7 @@ for directory in directories:
         continue
 
     languages_data = list(language_sizes.items())
-    labels = [f"{lang} ({size / total_size * 100:.1f}%)" for lang, size in languages_data]
+    labels = [f"{lang} {size / total_size * 100:.1f}%" for lang, size in languages_data]
     sizes = [size / total_size * 100 for lang, size in languages_data]
     colors = [languages.get(language, {}).get("color", "#ededed") for language, _ in languages_data]
 
@@ -48,19 +48,19 @@ for directory in directories:
     valsnorm = np.array(sizes) / 100 * 2 * np.pi
     valsleft = np.cumsum(np.append(0, valsnorm[:-1]))
 
-    ax.bar(x=valsleft, width=valsnorm, bottom=1-0.3, height=0.3, color=colors, linewidth=1, align="edge")
+    bars = ax.bar(x=valsleft, width=valsnorm, bottom=1-0.3, height=0.3, color=colors, linewidth=1, align="edge")
 
- 
-    for i, (angle, label) in enumerate(zip(valsleft, labels)):
-        angle_mid = angle + valsnorm[i] / 2 
-        
-        ax.text(angle_mid, 1, label, horizontalalignment='center', verticalalignment='center', alpha=.5,
-                color='black', fontsize=10, fontweight='bold', zorder=10, 
-                rotation_mode='anchor', position=(angle_mid + 0.005, 1.1)) 
-        
-        ax.text(angle_mid, 1, label, horizontalalignment='center', verticalalignment='center', 
-                color='white', fontsize=10, fontweight='bold', zorder=20, 
-                rotation_mode='anchor', position=(angle_mid, 1.1))
+    legend_labels = labels
+    plt.legend(
+        bars,
+        legend_labels,
+        loc='center',
+        bbox_to_anchor=(0.5, -0.07),
+        ncol=4,
+        frameon=True,
+        fancybox=True,
+        fontsize=8
+    )
     
     ax.set_axis_off()
     fig.patch.set_facecolor('none')  
