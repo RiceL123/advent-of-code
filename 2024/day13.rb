@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'json'
+require 'matrix'
 
 def section_to_machine(section_lines)
   button_a, button_b, prize = section_lines.split("\n")
@@ -18,8 +18,6 @@ end
 
 A_COST = 3
 B_COST = 1
-
-require 'matrix'
 def cheapest_win(machine, max_presses)
   # assume there is only one solution to the system of 2 linear equations
   # machine[:a][0] * a_presses + machine[:b][0] * b_presses = machine[:prize][0]
@@ -44,7 +42,7 @@ sections.split("\n\n").each do |section|
   machine = section_to_machine(section)
   part1 += cheapest_win(machine, 100)
 end
-puts part1
+puts "part1: #{part1}"
 
 part2 = 0
 sections.split("\n\n").each do |section|
@@ -53,4 +51,4 @@ sections.split("\n\n").each do |section|
   machine[:prize][1] += 10000000000000
   part2 += cheapest_win(machine, Float::INFINITY)
 end
-puts part2
+puts "part2: #{part2}"
