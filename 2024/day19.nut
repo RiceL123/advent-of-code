@@ -39,7 +39,6 @@ function num_design_ways(design, patterns) {
             local remaining = design.slice(pat.len());
             local res = num_design_ways(remaining, patterns);
             design_ways += res;
-            cache[design] <- design_ways;
         }
     }
 
