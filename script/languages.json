@@ -19,6 +19,10 @@
     "color": "#f34b7d",
     "extensions": [".cpp"]
   },
+  "Dart": {
+    "color": "#00B4AB",
+    "extensions": [".dart"]
+  },
   "Elixir": {
     "color": "#6e4a7e",
     "extensions": [".ex"]
@@ -55,6 +59,10 @@
     "color": "#000080",
     "extensions": [".lua"]
   },
+  "Nim": {
+    "color": "#ffc200",
+    "extensions": [".nim", ".nimble", ".nimrod"]
+  },
   "OCaml": {
     "color": "#ef7a08",
     "extensions": [".ml"]
@@ -67,6 +75,10 @@
     "color": "#198CE7",
     "extensions": [".r"]
   },
+  "Roc": {
+    "color": "#7c38f5",
+    "extensions": [".roc"]
+  },
   "Ruby": {
     "color": "#701516",
     "extensions": [".rb"]
@@ -78,6 +90,10 @@
   "SQL": {
     "color": "#e38c00",
     "extensions": [".sql"]
+  },
+  "Squirrel": {
+    "color": "#800000",
+    "extensions": [".nut"]
   },
   "Shell": {
     "color": "#89e051",
