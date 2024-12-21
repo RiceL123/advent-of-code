@@ -27,6 +27,10 @@
     "color": "#6e4a7e",
     "extensions": [".ex"]
   },
+  "Gleam": {
+    "color": "#ffaff3",
+    "extensions": [".gleam"]
+  },
   "Go": {
     "color": "#00ADD8",
     "extensions": [".go"]
