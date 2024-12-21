@@ -19,6 +19,10 @@
     "color": "#f34b7d",
     "extensions": [".cpp"]
   },
+  "Crystal": {
+    "color": "#000100",
+    "extensions": [".cr"]
+  },
   "Dart": {
     "color": "#00B4AB",
     "extensions": [".dart"]
