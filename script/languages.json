@@ -83,6 +83,10 @@
     "color": "#198CE7",
     "extensions": [".r"]
   },
+  "Raku": {
+    "color": "#0000fb",
+    "extensions": [".raku", ".p6", ".6pl", ".pl6"]
+  },
   "Roc": {
     "color": "#7c38f5",
     "extensions": [".roc"]
