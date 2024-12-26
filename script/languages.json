@@ -67,6 +67,10 @@
     "color": "#000080",
     "extensions": [".lua"]
   },
+  "Mojo": {
+    "color": "#ff4c1f",
+    "extensions": [".mojo"]
+  },
   "Nim": {
     "color": "#ffc200",
     "extensions": [".nim", ".nimble", ".nimrod"]
@@ -74,6 +78,10 @@
   "OCaml": {
     "color": "#ef7a08",
     "extensions": [".ml"]
+  },
+  "Odin": {
+    "color": "#60AFFE",
+    "extensions": [".odin"]
   },
   "Python": {
     "color": "#3572A5",
