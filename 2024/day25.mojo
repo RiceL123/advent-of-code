@@ -70,7 +70,7 @@ def main():
 
 #!/usr/bin/env python3
 
-# def get_keys_locks(file_path: str) -> tuple[list[str], list[str]]:
+# def get_keys_locks(file_path: str) -> tuple[list[int], list[int]]:
 #     keys = []
 #     locks = []
 #     [
