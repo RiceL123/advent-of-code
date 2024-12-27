@@ -1,7 +1,10 @@
+import gleam/dict
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/option
 import gleam/result
+import gleam/set
 import gleam/string
 import simplifile
 
@@ -14,28 +17,37 @@ pub fn main() {
   let part1 =
     secret_map
     |> list.fold(0, fn(acc, x) { acc + x.0 })
+
   io.println("part1: " <> int.to_string(part1))
 
   let part2 =
-    cartesian_product_4(-9, 9)
-    |> list.map(fn(opt_change) {
-      secret_map
-      |> list.map(fn(x) {
-        list.window_by_2(x.1)
-        |> list.map(fn(x) { #(x.1 % 10, x.1 % 10 - x.0 % 10) })
-        |> list.window(4)
-        |> list.find(fn(changes) {
-          list.map(changes, fn(x) { x.1 }) == opt_change
-        })
-        |> fn(res_found) {
-          case res_found {
-            Error(_) -> 0
-            Ok(changes) -> result.unwrap(list.last(changes), #(0, 0)).0
+    list.fold(secret_map, dict.new(), fn(sequence_dict, x) {
+      list.window_by_2(x.1)
+      |> list.map(fn(x) { #(x.1 % 10, x.1 % 10 - x.0 % 10) })
+      |> list.window(4)
+      |> list.fold(#(set.new(), sequence_dict), fn(collects, changes) {
+        let seen_sequences = collects.0
+        let sequence_dict = collects.1
+        let sequence = list.map(changes, fn(x) { x.1 })
+        case set.contains(seen_sequences, sequence) {
+          True -> collects
+          False -> {
+            let price = result.unwrap(list.last(changes), #(0, 0)).0
+            let updated_dict =
+              dict.upsert(sequence_dict, sequence, fn(res) {
+                case res {
+                  option.Some(val) -> val + price
+                  option.None -> price
+                }
+              })
+            #(set.insert(seen_sequences, sequence), updated_dict)
           }
         }
       })
-      |> list.fold(0, fn(acc, x) { acc + x })
+      |> fn(x) { x.1 }
     })
+    |> dict.to_list()
+    |> list.map(fn(x) { x.1 })
     |> list.max(int.compare)
     |> result.unwrap(0)
 
@@ -77,24 +89,5 @@ fn secret_map(secret: Int, n: Int) -> #(Int, List(Int)) {
         |> result.unwrap(0)
       }
     #(sec, sec)
-  })
-}
-
-fn cartesian_product_4(min: Int, max: Int) -> List(List(Int)) {
-  let a = list.range(min, max)
-  let b = list.range(min, max)
-  let c = list.range(min, max)
-  let d = list.range(min, max)
-
-  a
-  |> list.fold([], fn(acc, w) {
-    b
-    |> list.fold(acc, fn(acc, x) {
-      c
-      |> list.fold(acc, fn(acc, y) {
-        d
-        |> list.fold(acc, fn(acc, z) { acc |> list.append([[w, x, y, z]]) })
-      })
-    })
   })
 }
