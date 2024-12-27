@@ -1,13 +1,5 @@
 #!/usr/bin/env crystal
 
-codes = get_codes("day21.txt")
-
-part1 = codes
-  .map { |(code, numeric)| shortest_sequence(code, 2) * numeric }
-  .sum
-
-puts "part1: #{part1}"
-
 def get_codes(file_path)
   content = File.read(file_path).split("\n")
   content.map { |code| {code, code[0, 3].to_i} }
@@ -15,20 +7,21 @@ end
 
 class Pad
   NUM = {
-    {0, 0} => '7', {0, 1} => '8', {0, 2} => '9',
-    {1, 0} => '4', {1, 1} => '5', {1, 2} => '6',
-    {2, 0} => '1', {2, 1} => '2', {2, 2} => '3',
-                   {3, 1} => '0', {3, 2} => 'A',
+    '7' => {0, 0}, '8' => {0, 1}, '9' => {0, 2},
+    '4' => {1, 0}, '5' => {1, 1}, '6' => {1, 2},
+    '1' => {2, 0}, '2' => {2, 1}, '3' => {2, 2},
+                   '0' => {3, 1}, 'A' => {3, 2},
   }
-
-  NUM_POS = NUM.invert
 
   KEY = {
-                   {0, 1} => '^', {0, 2} => 'A',
-    {1, 0} => '<', {1, 1} => 'v', {1, 2} => '>',
+                   '^' => {0, 1}, 'A' => {0, 2},
+    '<' => {1, 0}, 'v' => {1, 1}, '>' => {1, 2},
   }
+end
 
-  KEY_POS = KEY.invert
+class Cache
+  SEQ = Hash(Tuple(String, Int32), Int64).new
+  DIST = Hash(Tuple(Char, Char, Int32), Int64).new
 end
 
 def move_opt(a : Tuple(Int, Int), b : Tuple(Int, Int)) : String
@@ -48,38 +41,45 @@ def move_opt(a : Tuple(Int, Int), b : Tuple(Int, Int)) : String
   seq
 end
 
-def optimal_sequence(pad : Hash(Tuple(Int, Int), Char), pad_pos : Hash(Char, Tuple(Int, Int)), code : String) : String
-  keypad_sequence = ""
-  i = 0
-  target = pad_pos[code.char_at(i)]
-  start = pad_pos['A']
-
-  curr = start
-  while i < code.size
-    target = pad_pos[code.char_at(i)]
-    opt = pad.has_key?({curr[0], target[1]}) ? {curr[0], target[1]} : {target[0], curr[1]}
-
-    # move to the optimal intermediary and then target
-    keypad_sequence += move_opt(curr, opt) + move_opt(opt, target) + "A"
-
-    curr = target
-    i += 1
+def sequences(start : Char, finish : Char, pad = Pad::KEY) : Set
+  if Pad::NUM.has_key?(start) && Pad::NUM.has_key?(finish)
+    pad = Pad::NUM
   end
 
-  keypad_sequence
+  [{pad[finish][0], pad[start][1]}, {pad[start][0], pad[finish][1]}]
+    .reject { |x| !pad.invert.has_key?(x) }
+    .map { |x| move_opt(pad[start], x) + move_opt(x, pad[finish]) + "A" }
+    .to_set
 end
 
-def keypad_sequence_len(sequence : String) : Int
-  a = optimal_sequence(Pad::KEY, Pad::KEY_POS, sequence)
-  b = optimal_sequence(Pad::KEY, Pad::KEY_POS, a)
+def shortest_sequence(seq : String, depth : Int, length : Int64 = Int64.new(0)) : Int64
+  if depth == 0
+    return seq.size.to_i64
+  end
 
-  puts "#{b}"
-  return b.size
+  length += Cache::SEQ.fetch({seq, depth}) {
+    Cache::SEQ[{seq, depth}] = (0..seq.size - 1).map { |i|
+      Cache::DIST.fetch({seq.char_at(i - 1), seq.char_at(i), depth}) {
+        Cache::DIST[{seq.char_at(i - 1), seq.char_at(i), depth}] = sequences(seq.char_at(i - 1), seq.char_at(i))
+        .map { |x| shortest_sequence(x, depth - 1) }
+        .min
+      }
+    }.sum
+  }
+
+  length
 end
 
-def shortest_sequence(code, keypads)
-  sequence = optimal_sequence(Pad::NUM, Pad::NUM_POS, code)
-  print "#{code}: "
+codes = get_codes("day21.txt")
 
-  keypad_sequence_len(sequence)
-end
+part1 = codes
+  .map { |(code, numeric)| (shortest_sequence(code, 3) * numeric) }
+  .sum
+
+puts "part1: #{part1}"
+
+part2 = codes
+  .map { |(code, numeric)| (shortest_sequence(code, 26) * numeric) }
+  .sum
+
+puts "part2: #{part2}"
