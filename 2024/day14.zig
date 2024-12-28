@@ -1,4 +1,6 @@
 const std = @import("std");
+var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+var allocator = gpa.allocator();
 const ArrayList = std.ArrayList;
 
 const WIDTH = 101;
@@ -15,80 +17,13 @@ const Robot = struct {
     }
 };
 
-fn sort_bots(_: void, a: Robot, b: Robot) bool {
-    if (a.pos.x == b.pos.x) {
-        return a.pos.x < b.pos.x;
-    }
-
-    return a.pos.y < b.pos.y;
-}
-
 pub fn main() !void {
-    var robots = try file_to_robots("day14.txt");
-    // defer robots.deinit();
-
-    // for (robots.items) |*robot| {
-    //     robot.simulate(100);
-    // }
-    // std.debug.print("part1: {d}\n", .{product_quadrants(robots.items)});
-
-    // debug_robots(robots.items);
-
-    var i: i32 = 5000;
-    for (robots.items) |*robot| {
-        robot.simulate(i);
-    }
-
-    const bots = try robots.toOwnedSlice();
-    for (bots) |*robot| {
-        std.debug.print("{}", .{robot});
-    }
-    while (true) {
-        for (bots) |*robot| {
-            robot.simulate(1);
-        }
-        i += 1;
-
-        std.mem.sort(Robot, bots, {}, sort_bots);
-
-        // if there are 10 robots in a line, print
-        var prev: i32 = 0;
-        var prev_pos = Vec2{ .x = 0, .y = 0 };
-        for (bots) |bot| {
-            if (prev_pos.x == bot.pos.x and prev_pos.y == bot.pos.y + 1) {
-                prev += 1;
-            } else {
-                prev = 0;
-            }
-
-            prev_pos = bot.pos;
-
-            if (prev > 10) {
-                std.debug.print("Line found at i: {}\n", .{i});
-                debug_robots(robots.items);
-                // return;
-            }
-        }
-
-        // if (prev > 10) {
-        //     std.debug.print("i: {d}\n", .{i});
-        //     debug_robots(robots.items);
-        //     break;
-        // }
-
-        // debug_robots(robots.items);
-        if (i > HEIGHT * WIDTH) {
-            std.debug.print("{d} limit reached i: {d}\n", .{ HEIGHT * WIDTH, i });
-            break;
-        }
-
-        std.time.sleep(std.time.ns_per_ms * 100);
-    }
+    std.debug.print("part1: {d}\n", .{try part1()});
+    std.debug.print("part2: {d}\n", .{try part2()});
 }
 
 fn file_to_robots(file_path: []const u8) !ArrayList(Robot) {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var robots = ArrayList(Robot).init(gpa.allocator());
+    var robots = ArrayList(Robot).init(allocator);
     const file = try std.fs.cwd().openFile(file_path, .{});
     defer file.close();
 
@@ -116,6 +51,17 @@ fn file_to_robots(file_path: []const u8) !ArrayList(Robot) {
     return robots;
 }
 
+fn part1() !i32 {
+    var robots = try file_to_robots("day14.txt");
+    defer robots.deinit();
+
+    for (robots.items) |*robot| {
+        robot.simulate(100);
+    }
+
+    return product_quadrants(robots.items);
+}
+
 pub fn product_quadrants(robots: []Robot) i32 {
     var quad_1: i32 = 0;
     var quad_2: i32 = 0;
@@ -136,12 +82,29 @@ pub fn product_quadrants(robots: []Robot) i32 {
     return quad_1 * quad_2 * quad_3 * quad_4;
 }
 
+fn part2() !i32 {
+    var robots = try file_to_robots("day14.txt");
+    defer robots.deinit();
+
+    var seconds: i32 = 1;
+    while (true) {
+        for (robots.items) |*robot| {
+            robot.simulate(1);
+        }
+
+        if (!try has_overlaps(robots.items)) {
+            break;
+        }
+        seconds += 1;
+    }
+
+    debug_robots(robots.items);
+    return seconds;
+}
+
 pub fn debug_robots(robots: []Robot) void {
     var map = [_][WIDTH]i32{[_]i32{0} ** WIDTH} ** HEIGHT;
-    // defer map.deinit();
     for (robots) |robot| {
-        std.debug.print("{}\n", .{robot});
-        // map[@intCast(robot.pos.x)][@intCast(robot.pos.y)] += 1;
         map[@intCast(robot.pos.y)][@intCast(robot.pos.x)] += 1;
     }
 
@@ -155,4 +118,16 @@ pub fn debug_robots(robots: []Robot) void {
         }
         std.debug.print("\n", .{});
     }
+}
+
+fn has_overlaps(robots: []Robot) !bool {
+    var map = std.AutoHashMap(Vec2, bool).init(allocator);
+    for (robots) |robot| {
+        if (!map.contains(robot.pos)) {
+            try map.put(robot.pos, true);
+        } else {
+            return true;
+        }
+    }
+    return false;
 }
