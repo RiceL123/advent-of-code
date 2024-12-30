@@ -29,7 +29,7 @@
   },
   "Elixir": {
     "color": "#6e4a7e",
-    "extensions": [".ex"]
+    "extensions": [".ex", ".exs"]
   },
   "Gleam": {
     "color": "#ffaff3",
