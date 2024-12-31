@@ -6,6 +6,34 @@ import 'dart:io';
 void main() {
   var (registers, program) = get_registers_and_program("day17.txt");
 
+  print("part1: " + run(registers, program).join(","));
+
+  var A = 0;
+  for (int i = program.length - 1; i >= 0; i--) {
+    A <<= 3;
+    registers['A'] = A;
+    while (!eq(run(registers, program), program.sublist(i))) {
+      A += 1;
+      registers['A'] = A;
+    }
+  }
+
+  print("part2: ${A}");
+}
+
+bool eq(List<int> a, List<int> b) {
+  if (a.length != b.length) {
+    return false;
+  }
+  for (int i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+List<int> run(registers, program) {
   var output = [];
   for (int i = 0; i < program.length - 1; i += 2) {
     var opcode = program[i];
@@ -32,7 +60,7 @@ void main() {
     }
   }
 
-  print("part1: " + output.join(","));
+  return new List<int>.from(output);
 }
 
 int combo(registers, int operand) {
