@@ -111,6 +111,10 @@
     "color": "#e38c00",
     "extensions": [".sql"]
   },
+  "Scala": {
+    "color": "#c22d40",
+    "extensions": [".scala"]
+  },
   "Squirrel": {
     "color": "#800000",
     "extensions": [".nut"]
