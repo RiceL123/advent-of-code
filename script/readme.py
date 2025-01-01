@@ -14,7 +14,7 @@ with open("./languages.json", "r") as f:
 extension_to_language = {ext: lang for lang, details in languages.items() for ext in details["extensions"]}
 
 parent_dir = os.path.join(os.pardir)
-directories = [d for d in os.listdir(parent_dir) if d == str(date.today().year)]
+directories = [d for d in os.listdir(parent_dir) if d == "2024"]
 
 image_references = []
 
