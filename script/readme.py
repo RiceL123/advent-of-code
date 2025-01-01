@@ -43,7 +43,7 @@ for directory in directories:
     sizes = [size / total_size * 100 for lang, size in languages_data]
     colors = [languages.get(language, {}).get("color", "#ededed") for language, _ in languages_data]
 
-    fig = plt.figure(figsize=(16, 9), dpi=100)
+    fig = plt.figure(figsize=(16, 9), dpi=200)
     gs = gridspec.GridSpec(2, 1, height_ratios=[5, 1], hspace=0.2)
 
     ax = fig.add_subplot(gs[0], projection="polar")
@@ -69,14 +69,14 @@ for directory in directories:
         legend_labels,
         loc="center",
         bbox_to_anchor=(0.5, 0.5),
-        ncol=4,
+        ncol=5,
         frameon=True,
         fancybox=True,
         fontsize=8,
     )
 
     height_in_inches = 320 / 96
-    aspect_ratio = 16 / 9
+    aspect_ratio = 18 / 9
     width_in_inches = height_in_inches * aspect_ratio
     fig.set_size_inches(width_in_inches, height_in_inches)
 
