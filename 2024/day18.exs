@@ -32,15 +32,14 @@ defmodule Graph do
     |> Map.get(@finish)
   end
 
-  def get_neighbours({row, col}, visited, inverted_graph, steps, queue) do
+  def get_neighbours({row, col}, visited, inverted_graph, steps) do
     neighbours =
       [{row + 1, col}, {row - 1, col}, {row, col + 1}, {row, col - 1}]
       |> Enum.filter(fn {r, c} ->
         r >= 0 and r <= elem(@finish, 0) and
           c >= 0 and c <= elem(@finish, 1) and
           not MapSet.member?(inverted_graph, {r, c}) and
-          not MapSet.member?(visited, {r, c}) and
-          not Enum.member?(queue, {r, c})
+          not MapSet.member?(visited, {r, c})
       end)
 
     updated_steps =
@@ -54,7 +53,7 @@ defmodule Graph do
 
   def bfs(inverted_graph) do
     queue = [@start]
-    visited = MapSet.new()
+    visited = MapSet.new([@start])
     steps = %{@start => 0}
 
     Stream.unfold({queue, visited, steps}, fn
@@ -64,16 +63,18 @@ defmodule Graph do
       {[head | tail], visited, steps} when head == @finish ->
         {
           {[head | tail], visited, steps},
-          {[], visited, steps}
+          {[], MapSet.new(), %{@finish => steps[@finish]}}
           # 1 more emission and then terminate
         }
 
       {[head | tail], visited, steps} ->
-        {neighbours, updated_steps} = get_neighbours(head, visited, inverted_graph, steps, tail)
+        {neighbours, updated_steps} = get_neighbours(head, visited, inverted_graph, steps)
+
+        updated_visited = Enum.reduce(neighbours, visited, fn x, acc -> MapSet.put(acc, x) end)
 
         {
           {[head | tail], visited, steps},
-          {tail ++ neighbours, visited |> MapSet.put(head), updated_steps}
+          {tail ++ neighbours, updated_visited, updated_steps}
         }
     end)
   end

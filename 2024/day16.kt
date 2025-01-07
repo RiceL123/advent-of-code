@@ -11,7 +11,7 @@ data class StepNode(
     val pos: Pair<Int, Int>,
     val direction: Pair<Int, Int>,
     val score: Int,
-    val steps: MutableSet<Pair<Int, Int>>
+    var steps: MutableSet<Pair<Int, Int>>
 )
 
 fun get_graph(file_path: String) : Pair<MutableMap<Pair<Int, Int>, Int>, Pair<Pair<Int, Int>, Pair<Int, Int>>> {
@@ -23,11 +23,11 @@ fun get_graph(file_path: String) : Pair<MutableMap<Pair<Int, Int>, Int>, Pair<Pa
     for ((row, line) in text.withIndex()) {
         for ((col, char) in line.withIndex()) {
             when (char) {
-                '.' -> graph[Pair(row, col)] = -1
+                '.' -> graph[Pair(row, col)] = Int.MAX_VALUE
                 'S' -> start = Pair(row, col)
                 'E' -> {
                     finish = Pair(row, col)
-                    graph[Pair(row, col)] = -1
+                    graph[Pair(row, col)] = Int.MAX_VALUE
                 }
             }
         }
@@ -37,73 +37,65 @@ fun get_graph(file_path: String) : Pair<MutableMap<Pair<Int, Int>, Int>, Pair<Pa
 }
 
 fun dijkstra(graph: MutableMap<Pair<Int, Int>, Int>, start: Pair<Int, Int>, finish: Pair<Int, Int>): Int {
+    var res = 0;
     val queue = PriorityQueue<Node>(compareBy { it.score })
-    var visited: MutableSet<Pair<Pair<Int,Int>, Pair<Int,Int>>> = mutableSetOf()
-
+    var visited: MutableSet<Pair<Int,Int>> = mutableSetOf()
+    
     queue.add(Node(start, Pair(0, 1), 0)) // start facing east (0,1) & score 0
 
     while (queue.isNotEmpty()) {
         val curr = queue.poll()
 
         if (curr.pos == finish) {
-            return curr.score;
+            res = curr.score
         }
 
-        // try move forward position
-        val forward: Pair<Int, Int> = Pair(curr.pos.first + curr.direction.first, curr.pos.second + curr.direction.second);
-        if (graph.containsKey(forward) && !visited.contains(Pair(forward, curr.direction))) {
-            queue.add(Node(forward, curr.direction, curr.score + 1))
-            visited.add(Pair(forward, curr.direction))
-        }
-
-        // try rotate if theres a space there
-        val perpendicular_directions = listOf(
-            Pair(curr.direction.second, -curr.direction.first),
-            Pair(-curr.direction.second, curr.direction.first)
+        val neighbour_directions = listOf(
+            Pair(curr.direction, 1),
+            Pair(Pair(curr.direction.second, -curr.direction.first), 1001),
+            Pair(Pair(-curr.direction.second, curr.direction.first), 1001)  
         )
-        for (direction in perpendicular_directions) {
+
+        for ((direction, score) in neighbour_directions) {
             val next_pos = Pair(curr.pos.first + direction.first, curr.pos.second + direction.second)
-            if (graph.containsKey(next_pos) && !visited.contains(Pair(curr.pos, direction))) {
-                queue.add(Node(curr.pos, direction, curr.score + 1000))
-                visited.add(Pair(curr.pos, direction))
+            val next_score = curr.score + score
+            if (graph.containsKey(next_pos) && next_score < graph[next_pos]!!) {
+                queue.add(Node(next_pos, direction, next_score))
+                visited.add(next_pos)
+                graph[next_pos] = next_score
             }
         }
     }
 
-    return 0;
+    return res;
 }
 
-fun dfs(graph: MutableMap<Pair<Int, Int>, Int>, finish: Pair<Int, Int>, max_score: Int, curr: StepNode): MutableSet<Pair<Int, Int>> {
-    if (curr.pos == finish) {
-        println("finished! $curr")
-        return curr.steps
-    }
+fun backwards_bfs(graph: MutableMap<Pair<Int, Int>, Int>, finish: Pair<Int, Int>, min_score: Int): Int {
+    var nodes = 2
+    var queue: ArrayDeque<Node> = ArrayDeque(listOf(Node(finish, Pair(1, 0), min_score), Node(finish, Pair(0, -1), min_score)))
+    var visited: MutableSet<Pair<Int,Int>> = mutableSetOf()
 
-    if (curr.score >= max_score) {
-        return mutableSetOf() // empty set
-    }
+    while (queue.isNotEmpty()) {
+        val curr = queue.removeFirst()
 
-    var tiles: MutableSet<Pair<Int, Int>> = mutableSetOf()
-    // try move forward position
-    val forward: Pair<Int, Int> = Pair(curr.pos.first + curr.direction.first, curr.pos.second + curr.direction.second);
-    if (graph.containsKey(forward)) {
-        curr.steps.add(forward)
-        tiles.addAll(dfs(graph, finish, max_score, StepNode(forward, curr.direction, curr.score + 1, curr.steps)))
-    }
+        val neighbour_directions = listOf(
+            Pair(curr.direction, 1),
+            Pair(Pair(curr.direction.second, -curr.direction.first), 1001),
+            Pair(Pair(-curr.direction.second, curr.direction.first), 1001)  
+        )
 
-    // try rotate if theres a space there
-    val perpendicular_directions = listOf(
-        Pair(curr.direction.second, -curr.direction.first),
-        Pair(-curr.direction.second, curr.direction.first)
-    )
-    for (direction in perpendicular_directions) {
-        val next_pos = Pair(curr.pos.first + direction.first, curr.pos.second + direction.second)
-        if (graph.containsKey(next_pos)) {
-            tiles.addAll(dfs(graph, finish, max_score, (StepNode(curr.pos, direction, curr.score + 1000, curr.steps))))
+        for ((direction, score) in neighbour_directions) {
+            val next_pos = Pair(curr.pos.first + direction.first, curr.pos.second + direction.second)
+            val next_score = curr.score - score
+            if (graph.containsKey(next_pos) && !visited.contains(next_pos) && (next_score == graph[next_pos]!! || next_score - 1000 == graph[next_pos]!!)) {
+                queue.addLast(Node(next_pos, direction, next_score))
+                visited.add(next_pos)
+                nodes += 1
+            }
         }
     }
 
-    return tiles;
+    return nodes
 }
 
 fun main() {
@@ -113,8 +105,6 @@ fun main() {
     val min_score = dijkstra(graph, start, finish)
     println("part1: $min_score")
 
-    // although dfs correctly finds all paths to finish, the different paths are
-    // not optimal for some reason
-    val dfs_score = dfs(graph, finish, min_score, StepNode(start, Pair(0, 1), 0, mutableSetOf(start))).size
-    println("part2: $dfs_score")
+    val part2 = backwards_bfs(graph, finish, min_score)
+    println("part2: $part2")
 }
