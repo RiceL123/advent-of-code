@@ -20,7 +20,7 @@
     "extensions": [".cpp"]
   },
   "Crystal": {
-    "color": "#000100",
+    "color": "#000000",
     "extensions": [".cr"]
   },
   "Dart": {

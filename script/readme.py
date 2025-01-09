@@ -1,54 +1,58 @@
 #!/usr/bin/env python3
 
-import os
-import json
+import glob, os, json, math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from datetime import date
-from collections import defaultdict
 
-with open("./languages.json", "r") as f:
-    languages = json.load(f)
+languages_info = json.load(open("./languages.json", "r"))
+extension_to_language = {
+    ext: (lang, details["color"])
+    for lang, details in languages_info.items()
+    for ext in details["extensions"]
+}
 
-extension_to_language = {ext: lang for lang, details in languages.items() for ext in details["extensions"]}
+class Language:
+    def __init__(self, filepath):
+        lang, color = extension_to_language.get(
+            os.path.splitext(filepath)[1], "Unknown"
+        )
+        self.lang = lang
+        self.size = os.path.getsize(filepath)
+        self.color = color
 
-parent_dir = os.path.join(os.pardir)
-directories = [d for d in os.listdir(parent_dir) if d == "2024"]
+def sortLanguages(file_glob) -> tuple[list[Language], int]:
+    def hexToRGB(color: str):
+        color = color[1:]  # ignore #prefix
+        R = int(color[0:2], 16) / 255
+        G = int(color[2:4], 16) / 255
+        B = int(color[4:6], 16) / 255
+        return R, G, B
 
-image_references = []
+    def getHue(color: str):
+        R, G, B = hexToRGB(color)
+        return math.atan2(math.sqrt(3) * (G - B), 2 * R - G - B)
 
-for directory in directories:
-    dir_path = os.path.join(parent_dir, directory)
+    def getLuminance(color: str):
+        R, G, B = hexToRGB(color)
+        return 0.2126 * R + 0.7152 * G + 0.0722 * B
 
-    language_sizes = defaultdict(int)
+    def isChromatic(color: str):
+        R, G, B = hexToRGB(color)
+        return R != G or G != B
 
-    for root, _, files in os.walk(dir_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            if os.path.isfile(file_path):
-                file_size = os.path.getsize(file_path)
-                file_extension = f".{file.split('.')[-1]}"
+    languages = [Language(file_path) for file_path in glob.glob(file_glob)]
+    darkest = min(filter(lambda x: isChromatic(x.color), languages), key=lambda x: getLuminance(x.color))
+    langs = sorted(languages, key=lambda x: getHue(x.color) if isChromatic(x.color) else getHue(darkest.color) + 0.1)
+    size_total = sum([x.size for x in langs])
+    return langs, size_total
 
-                language = extension_to_language.get(file_extension, "Unknown")
-                language_sizes[language] += file_size
-
-    total_size = sum(language_sizes.values())
-    if total_size == 0:
-        print(f"No data found in directory: {directory}")
-        continue
-
-    languages_data = list(language_sizes.items())
-    labels = [f"{lang} {size / total_size * 100:.1f}%" for lang, size in languages_data]
-    sizes = [size / total_size * 100 for lang, size in languages_data]
-    colors = [languages.get(language, {}).get("color", "#ededed") for language, _ in languages_data]
-
+def saveDoughnut(langs: list[Language], size_total):
     fig = plt.figure(figsize=(16, 9), dpi=200)
     gs = gridspec.GridSpec(2, 1, height_ratios=[5, 1], hspace=0.2)
-
     ax = fig.add_subplot(gs[0], projection="polar")
 
-    valsnorm = np.array(sizes) / 100 * 2 * np.pi
+    valsnorm = np.array(list(map(lambda x: x.size / size_total, langs))) * 2 * np.pi
     valsleft = np.cumsum(np.append(0, valsnorm[:-1]))
 
     bars = ax.bar(
@@ -56,12 +60,12 @@ for directory in directories:
         width=valsnorm,
         bottom=1 - 0.3,
         height=0.3,
-        color=colors,
+        color=list(map(lambda x: x.color, langs)),
         align="edge",
     )
     ax.set_axis_off()
 
-    legend_labels = labels
+    legend_labels = list(map(lambda x: f"{x.lang} {(x.size / size_total * 100):.1f}%", langs))
     legend_ax = fig.add_subplot(gs[1])
     legend_ax.axis("off")
     legend_ax.legend(
@@ -83,6 +87,11 @@ for directory in directories:
     output_file = f"{directory}.svg"
     plt.savefig(output_file, format="svg", transparent=True)
 
-    image_reference = f"![Languages Progress](script/{output_file})"
-    image_references.append(f"### {directory}\n" + image_reference)
-    print(f"Added image reference for {directory}: {image_reference}")
+if __name__ == "__main__":
+    parent_dir = os.path.join(os.pardir)
+    directories = [d for d in os.listdir(parent_dir) if d == "2024"]
+
+    for directory in directories:
+        dir_path = os.path.join(parent_dir, directory)
+        langs, size_total = sortLanguages(os.path.join(dir_path, "day*"))
+        saveDoughnut(langs, size_total)
