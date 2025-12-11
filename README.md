@@ -3,6 +3,8 @@
 Solutions for Advent of code at https://adventofcode.com/
 
 ## Languages
+### 2025
+![Languages Progress](script/2025.svg)
 ### 2024
 ![Languages Progress](script/2024.svg)
 ### 2023
