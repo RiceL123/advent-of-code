@@ -89,7 +89,7 @@ def saveDoughnut(langs: list[Language], size_total):
 
 if __name__ == "__main__":
     parent_dir = os.path.join(os.pardir)
-    directories = [d for d in os.listdir(parent_dir) if d == "2024"]
+    directories = [d for d in os.listdir(parent_dir) if d == "2025"]
 
     for directory in directories:
         dir_path = os.path.join(parent_dir, directory)
