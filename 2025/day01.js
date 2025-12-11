@@ -7,7 +7,6 @@ const rotations = fs
   .filter(x => x !== '')
   .map(x => ([x[0], Number(x.slice(1))]));
 
-
 console.log(
   "part1: " +
   rotations.reduce(([dial, zeros], [operation, value]) => {
