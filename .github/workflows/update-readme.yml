@@ -20,7 +20,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install matplotlib
+          pip install matplotlib numpy pyyaml requests
 
       - name: Configure Git
         run: |
