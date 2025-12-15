@@ -8,12 +8,12 @@ const ranges = readFileSync(filePath)
   .split(',').map(x => {
     const [start, finish] = x.split('-')
     return [Number(start), Number(finish)]
-  });
-
-const print = (isInvalid: (x: string) => boolean) => ranges
+  })
   .map(([start, finish]) => Array.from({ length: finish - start + 1 }, (x, i) => start + i))
   .flat()
-  .map(String)
+  .map(String);
+
+const print = (isInvalid: (x: string) => boolean) => ranges
   .filter(isInvalid)
   .map(Number)
   .reduce((acc, x) => acc + x, 0);
