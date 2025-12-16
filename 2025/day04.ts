@@ -54,7 +54,7 @@ export class Day04 {
         .map(x => `${x.at(1)},${x.at(2)}`))),
       new Set<string>()
     )
-  )
+  );
 
   removeRolls = (grid: Set<string>): Set<string> => new Set(
     Array.from(grid)
@@ -63,7 +63,7 @@ export class Day04 {
         .filter(x => grid.has(x))
         .length < 4
       )
-  )
+  );
 
   removeRollsRecursive = (grid: Set<string>): number => {
     const removedRolls = this.removeRolls(grid);
@@ -71,7 +71,6 @@ export class Day04 {
     return this.removeRollsRecursive(grid.difference(removedRolls)) + removedRolls.size;
   }
 
-  part1 = computed(() => this.removeRolls(this.grid()).size)
-
+  part1 = computed(() => this.removeRolls(this.grid()).size);
   part2 = computed(() => this.removeRollsRecursive(this.grid()));
 }
