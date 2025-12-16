@@ -1,5 +1,4 @@
 import { Component, signal, ChangeDetectionStrategy, computed } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
 import { form, Field, debounce } from '@angular/forms/signals';
 
 const directions = [
@@ -76,5 +75,3 @@ export class Day04 {
 
   part2 = computed(() => this.removeRollsRecursive(this.grid()));
 }
-
-bootstrapApplication(Day04);
