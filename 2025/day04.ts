@@ -47,8 +47,8 @@ export class Day04 {
     .input()
     .value()
     .split('\n')
-    .reduce((acc, line, row) => acc.union(new Set(
-      [...line]
+    .reduce((acc, line, row) => acc.union(
+      new Set([...line]
         .map((x, col) => [x, row, col])
         .filter(x => x.at(0) === '@')
         .map(x => `${x.at(1)},${x.at(2)}`))),
