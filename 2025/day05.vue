@@ -20,8 +20,7 @@ function useDebouncedRef(value, delay = 500) {
   });
 }
 
-const input = useDebouncedRef(
-  `3-5
+const input = useDebouncedRef(`3-5
 10-14
 16-20
 12-18
@@ -32,9 +31,7 @@ const input = useDebouncedRef(
 11
 17
 32
-`,
-  200
-);
+`, 200);
 
 const parsedInput = computed(() => input.value
   .trim()
