@@ -43,11 +43,13 @@ const parsedInput = computed(() => input
 const ranges = computed(() => parsedInput
   .value
   .at(0)
-  .map((x) => x.split("-").map(Number)));
+  .map((x) => x.split("-").map(Number))
+);
 
 const ingredients = computed(() => parsedInput
   .value
-  .at(1));
+  .at(1)
+);
 
 const isInRange = (ingredient) => ranges
   .value
@@ -57,7 +59,8 @@ const part1 = computed(() => ingredients
   .value
   .map(Number)
   .filter(isInRange)
-  .length);
+  .length
+);
 
 const part2 = computed(() => [...ranges.value]
   .sort((a, b) => a[0] - b[0])
