@@ -33,18 +33,32 @@ const input = useDebouncedRef(`3-5
 32
 `, 200);
 
-const parsedInput = computed(() => input.value
+const parsedInput = computed(() => input
+  .value
   .trim()
   .split("\n\n")
   .map((x) => x.trim().split("\n"))
 );
 
-const ranges = computed(() => parsedInput.value.at(0).map((x) => x.split("-").map(Number)));
-const ingredients = computed(() => parsedInput.value.at(1));
+const ranges = computed(() => parsedInput
+  .value
+  .at(0)
+  .map((x) => x.split("-").map(Number)));
 
-const isInRange = (ingredient) => ranges.value.some(([start, end]) => ingredient >= start && ingredient <= end);
+const ingredients = computed(() => parsedInput
+  .value
+  .at(1));
 
-const part1 = computed(() => ingredients.value.map(Number).filter(isInRange).length);
+const isInRange = (ingredient) => ranges
+  .value
+  .some(([start, end]) => ingredient >= start && ingredient <= end);
+
+const part1 = computed(() => ingredients
+  .value
+  .map(Number)
+  .filter(isInRange)
+  .length);
+
 const part2 = computed(() => [...ranges.value]
   .sort((a, b) => a[0] - b[0])
   .reduce((acc, [start, end]) => acc.length > 0 && start <= acc.at(-1)[1] + 1
@@ -54,21 +68,6 @@ const part2 = computed(() => [...ranges.value]
   )
   .reduce((count, [start, end]) => count + (end - start + 1), 0)
 );
-
-// const part2 = computed(() => {
-//   const s = new Set(
-//     ranges.value
-//       .map(([start, finish]) =>
-//         Array.from(
-//           { length: finish - start < 0 ? start - finish + 1 : finish - start + 1 },
-//           (_, i) => start + i
-//         )
-//       )
-//       .flat()
-//   );
-
-//   return s.size;
-// });
 </script>
 
 <template>
