@@ -17,9 +17,9 @@
       if (i === arr.length - 1) {
         return [...curr]
           .reduce((acc, x, i) => ["*", "+"].includes(x)
-                ? [...acc, [i, i + curr.slice(i + 1).match(/\s+/).at(0).length]]
-                : acc,
-            [],
+            ? [...acc, [i, i + curr.slice(i + 1).match(/\s+/).at(0).length]]
+            : acc,
+            []
           )
           .map(([start, finish]) => Array.from({ length: arr.length }, (_, i) =>arr[i].slice(start, finish)));
       }
@@ -37,7 +37,7 @@
     input
       .trim()
       .split("\n")
-      .map((x) => x.trim().split(/\s+/))
+      .map(x => x.trim().split(/\s+/))
       .transpose()
       .map(([op, ...nums]) => ({ op, nums: nums.map(Number) }))
       .map(({ op, nums }) => {
@@ -53,11 +53,11 @@
     (input + " ")
       .split("\n")
       .transpose2()
-      .map((x) => {
+      .map(x => {
         const nums = x
           .slice(0, -1)
           .transpose3()
-          .map((x) => x.filter((x) => x !== " ").join(""))
+          .map(x => x.filter(x => x !== " ").join(""))
           .map(Number);
         return { op: x.at(-1).trim(), nums };
       })
